@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -46,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void init(){
         //linearLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
-        friendList.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
+        friendList.setLayoutManager(new GridLayoutManager(getApplicationContext(), 3));
         db = FirebaseFirestore.getInstance();
     }
 
@@ -62,7 +63,9 @@ public class MainActivity extends AppCompatActivity {
             public void onBindViewHolder(FriendsHolder holder, int position, Users model) {
                 progressBar.setVisibility(View.GONE);
                 holder.textName.setText(model.getLast());
-
+                Glide.with(getApplicationContext())
+                        .load(model.getImage())
+                        .into(holder.imageView);
 
                 holder.itemView.setOnClickListener(v -> {
                     Snackbar.make(friendList, model.getLast(), Snackbar.LENGTH_LONG)
@@ -91,7 +94,8 @@ public class MainActivity extends AppCompatActivity {
     public class FriendsHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.name)
         TextView textName;
-
+        @BindView(R.id.image)
+        ImageView imageView;
 
         public FriendsHolder(View itemView) {
             super(itemView);
